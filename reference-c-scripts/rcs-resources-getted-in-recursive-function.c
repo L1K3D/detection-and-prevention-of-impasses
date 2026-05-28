@@ -2,9 +2,11 @@
 #include <stdio.h>
 #include <unistd.h>
 
+// Mutex A and mutex B protect different shared resources
 pthread_mutex_t A = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t B = PTHREAD_MUTEX_INITIALIZER;
 
+// Recursive processing that may hold A across nested calls and lock B conditionally
 void processar(int nivel)
 {
     if (nivel == 0)
@@ -29,6 +31,7 @@ void *thread1(void *arg)
     return NULL;
 }
 
+// Thread 2 locks B first, then attempts to lock A. This can conflict with recursive processing.
 void *thread2(void *arg)
 {
     pthread_mutex_lock(&B);

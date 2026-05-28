@@ -2,9 +2,11 @@
 #include <stdio.h>
 #include <unistd.h>
 
+// Two mutexes used by threads that may retry with trylock
 pthread_mutex_t m1 = PTHREAD_MUTEX_INITIALIZER;
 pthread_mutex_t m2 = PTHREAD_MUTEX_INITIALIZER;
 
+// Thread 1 repeatedly locks m1 and then tries to lock m2
 void *t1(void *arg)
 {
     while (1)
@@ -24,6 +26,7 @@ void *t1(void *arg)
     return NULL;
 }
 
+// Thread 2 repeatedly locks m2 and then tries to lock m1
 void *t2(void *arg)
 {
     while (1)
